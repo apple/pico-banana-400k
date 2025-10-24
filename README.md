@@ -119,6 +119,8 @@ Manifest file: [multi-turn link](https://ml-site.cdn-apple.com/datasets/pico-ban
 
 ### 🖼️ 3. Source Images 
 Urls to download source images are provided along with edit instructions in [sft link](https://ml-site.cdn-apple.com/datasets/pico-banana-300k/nb/jsonl/sft.jsonl), [preference link](https://ml-site.cdn-apple.com/datasets/pico-banana-300k/nb/jsonl/preference.jsonl), and [multi-turn link](https://ml-site.cdn-apple.com/datasets/pico-banana-300k/nb/jsonl/multi-turn.jsonl)
+ 
+Another way to download the source images is to download packed files train_0.tar.gz and train_1.tar.gz from [Open Images](https://github.com/cvdfoundation/open-images-dataset#download-images-with-bounding-boxes-annotations), then map with the urls we provide using image file names. Due to legal requirements, we cannot provide the source image files directly.
 
 
 ## 🧩 License
