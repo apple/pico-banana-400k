@@ -1,5 +1,7 @@
 # 🍌 Pico-Banana-400K: A Large-Scale Dataset for Text-Guided Image Editing
 
+<font size=7><div align='center' > [[📖 Paper](https://www.arxiv.org/pdf/2510.19808)]  </div></font>
+
 **Pico-Banana-400K** is a large-scale dataset of **~400K text–image–edit triplets** designed to advance research in **text-guided image editing**.  
 Each example contains:
 - an **original image** (from [Open Images](https://storage.googleapis.com/openimages/web/factsfigures.html)),  
@@ -136,12 +138,11 @@ By using this dataset, you agree to comply with the terms of both licenses.
 If you use **🍌 Pico-Banana-400K** in your research, please cite it as follows:
 
 ```bibtex
-@misc{qian2025picobanana,
-  title        = {Pico-Banana-400K: A Large-Scale Dataset for Text-Guided Image Editing},
-  author       = {Yusu Qian and Eli Bocek-Rivele and Liangchen Song and Jiasen Lu and Jialing Tong and Yinfei Yang and Wenze Hu and Zhe Gan},
-  year         = {2025},
-  note         = {Dataset release (preprint / placeholder citation). Paper forthcoming.},
-  url          = {https://github.com/apple/ml-pico-banana-400K},
+@inproceedings{Qian2025PicoBanana400KAL,
+  title={Pico-Banana-400K: A Large-Scale Dataset for Text-Guided Image Editing},
+  author={Yusu Qian and Eli Bocek-Rivele and Liangchen Song and Jialing Tong and Yinfei Yang and Jiasen Lu and Wenze Hu and Zhe Gan},
+  year={2025},
+  url={https://api.semanticscholar.org/CorpusID:282272484}
 }
 
 
