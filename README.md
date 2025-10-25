@@ -75,7 +75,7 @@ Pico-Banana-400K is built using a **two-stage multimodal generation pipeline**:
 
 - **Single-Turn SFT samples (successful edits):** ~257K  
 - **Single-Turn Preference samples (failure cases):** ~56K
-- **Multi-Turn SFT samples (failure cases):** ~72K  
+- **Multi-Turn SFT samples (successful cases):** ~72K  
 - **Gemini-generated instructions:** concise, natural, and image-aware
 - **Edit coverage:** 35 edit types across 8 semantic categories  
 - **Image diversity:** includes humans, objects, text-rich scenes, etc from Open Images  
