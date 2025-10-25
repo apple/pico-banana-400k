@@ -120,10 +120,28 @@ Manifest files: [sft link](https://ml-site.cdn-apple.com/datasets/pico-banana-30
 Manifest file: [multi-turn link](https://ml-site.cdn-apple.com/datasets/pico-banana-300k/nb/manifest/multi_turn_manifest.txt)
 
 ### 🖼️ 3. Source Images 
-Urls to download source images are provided along with edit instructions in [sft link](https://ml-site.cdn-apple.com/datasets/pico-banana-300k/nb/jsonl/sft.jsonl), [preference link](https://ml-site.cdn-apple.com/datasets/pico-banana-300k/nb/jsonl/preference.jsonl), and [multi-turn link](https://ml-site.cdn-apple.com/datasets/pico-banana-300k/nb/jsonl/multi-turn.jsonl)
+Urls to download source images are provided along with edit instructions in [sft link](https://ml-site.cdn-apple.com/datasets/pico-banana-300k/nb/jsonl/sft.jsonl), [preference link](https://ml-site.cdn-apple.com/datasets/pico-banana-300k/nb/jsonl/preference.jsonl), and [multi-turn link](https://ml-site.cdn-apple.com/datasets/pico-banana-300k/nb/jsonl/multi-turn.jsonl). If you hit rate limit with Flickr when downloading images, you can either request higher rate limit with Flickr or follow steps below.
  
-Another way to download the source images is to download packed files train_0.tar.gz and train_1.tar.gz from [Open Images](https://github.com/cvdfoundation/open-images-dataset#download-images-with-bounding-boxes-annotations), then map with the urls we provide using image file names. Due to legal requirements, we cannot provide the source image files directly.
+Another way to download the source images is to download packed files train_0.tar.gz and train_1.tar.gz from [Open Images](https://github.com/cvdfoundation/open-images-dataset#download-images-with-bounding-boxes-annotations), then map with the urls we provide. We also provide a sample mapping code [here](map_openimage_url_to_local.py). Due to legal requirements, we cannot provide the source image files directly.
+```bash
+# install awscli(https://aws.amazon.com/cli/)
+# Download Open Images packed files 
+aws s3 --no-sign-request --endpoint-url https://s3.amazonaws.com cp s3://open-images-dataset/tar/train_0.tar.gz .
+aws s3 --no-sign-request --endpoint-url https://s3.amazonaws.com cp s3://open-images-dataset/tar/train_1.tar.gz .
 
+# Create folder for extracted images 
+mkdir openimage_source_images
+
+# Extract the tar files 
+tar -xvzf train_0.tar.gz -C openimage_source_images
+tar -xvzf train_1.tar.gz -C openimage_source_images
+
+# Download metadata CSV (ImageID ↔ OriginalURL mapping)  
+wget https://storage.googleapis.com/openimages/2018_04/train/train-images-boxable-with-rotation.csv
+
+# Map urls to local paths
+python map_openimage_url_to_local.py #this sample code is written for single-turn sft subset; please modify as needed
+```
 
 ## 🧩 License
 Pico-Banana-400K is released under the Creative Commons Attribution–NonCommercial–NoDerivatives (CC BY-NC-ND 4.0) license.
