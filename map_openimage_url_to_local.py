@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Map 'open_image_input_url' in a JSONL file to local Open Images images by searching all subfolders.
+Map Open Images URLs (single-turn or multi-turn) to local Open Images images.
 
-Steps:
-1. Read Open Images metadata CSV (ImageID ↔ OriginalURL)
-2. Recursively index all local image files under image_root
-3. Match each JSONL entry’s URL → ImageID → local file
-4. Write a new JSONL with 'local_input_image' field
+Supports two input formats:
+  1. Single-turn (e.g., preference.jsonl):
+     {"open_image_input_url": "https://farm6.staticflickr.com/..._o.jpg", ...}
+
+  2. Multi-turn (e.g., multi_turn.jsonl):
+     {"files": [{"id": "original_input_image", "url": "https://farm6.staticflickr.com/..._o.jpg"}, ...]}
 """
 
 import os
@@ -15,13 +16,14 @@ import csv
 import json
 from tqdm import tqdm
 
+is_multi_turn = False  # <-- Set to True for multi-turn format
+metadata_csv = "openimages/train-images-boxable-with-rotation.csv"
+jsonl_in = "openimages/sft.jsonl"  # or preference.jsonl or multi-turn.jsonl
+jsonl_out = "openimages/sft_with_local.jsonl"
+image_root = "openimages/openimage_source_images"  # parent folder containing train_*/ folders
 
-metadata_csv = "/openimages/train-images-boxable-with-rotation.csv"
-jsonl_in = "/openimages/sft.jsonl"
-jsonl_out = "/openimages/sft_with_local_source_images.jsonl"
-image_root = "/openimages/openimage_source_images"  # parent folder containing train_0/, train_1/, etc.
 
-
+print("📘 Loading metadata mapping (URL → ImageID)...")
 url_to_id = {}
 with open(metadata_csv, "r") as f:
     reader = csv.DictReader(f)
@@ -29,33 +31,41 @@ with open(metadata_csv, "r") as f:
         url = row["OriginalURL"].strip()
         img_id = row["ImageID"].strip()
         url_to_id[url] = img_id
+print(f"✅ Loaded {len(url_to_id):,} entries from metadata CSV")
 
-print(f"📘 Loaded {len(url_to_id):,} metadata entries (URL → ImageID)")
 
-
-print(f"📂 Scanning local images under: {image_root}")
+print(f"📂 Indexing local .jpg images under {image_root}...")
 local_id_to_path = {}
-
-for root, _, files in tqdm(os.walk(image_root), desc="Indexing local images"):
+for root, _, files in tqdm(os.walk(image_root), desc="Scanning subfolders"):
     for file in files:
         if file.lower().endswith(".jpg"):
             image_id = os.path.splitext(file)[0]
-            full_path = os.path.join(root, file)
-            local_id_to_path[image_id] = full_path
+            local_id_to_path[image_id] = os.path.join(root, file)
+print(f"✅ Indexed {len(local_id_to_path):,} local image files")
 
-print(f"📦 Indexed {len(local_id_to_path):,} local images")
 
-# ==== STEP 3: Process JSONL ====
 count_matched = 0
 count_url_not_found = 0
 count_file_missing = 0
 
+print("🔗 Mapping input URLs to local files...")
 with open(jsonl_in, "r") as fin, open(jsonl_out, "w") as fout:
-    for line in tqdm(fin, desc="Mapping URLs"):
+    for line in tqdm(fin, desc="Processing JSONL"):
         if not line.strip():
             continue
         data = json.loads(line)
-        url = data.get("open_image_input_url")
+
+        # --- SINGLE TURN FORMAT ---
+        if not is_multi_turn:
+            url = data.get("open_image_input_url")
+        # --- MULTI TURN FORMAT ---
+        else:
+            url = None
+            files = data.get("files", [])
+            for f in files:
+                if f.get("id") == "original_input_image":
+                    url = f.get("url")
+                    break
 
         if not url:
             data["local_input_image"] = None
@@ -65,7 +75,6 @@ with open(jsonl_in, "r") as fin, open(jsonl_out, "w") as fout:
 
         image_id = url_to_id.get(url)
         if not image_id:
-            # URL not found in metadata mapping
             data["local_input_image"] = None
             count_url_not_found += 1
         else:
@@ -79,9 +88,8 @@ with open(jsonl_in, "r") as fin, open(jsonl_out, "w") as fout:
 
         fout.write(json.dumps(data) + "\n")
 
-
-print("\n✅ Mapping completed.")
-print(f"  🟢 Matched successfully: {count_matched:,}")
-print(f"  🟡 URL not found in metadata: {count_url_not_found:,}")
-print(f"  🔴 ImageID found but file missing locally: {count_file_missing:,}")
+print("\n Mapping complete.")
+print(f"  Matched successfully: {count_matched:,}")
+print(f"  URL not found in metadata: {count_url_not_found:,}")
+print(f"  ImageID found but file missing locally: {count_file_missing:,}")
 print(f"\nOutput saved to: {jsonl_out}")
