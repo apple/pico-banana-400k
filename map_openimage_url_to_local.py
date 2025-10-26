@@ -18,9 +18,9 @@ from tqdm import tqdm
 
 is_multi_turn = False  # <-- Set to True for multi-turn format
 metadata_csv = "openimages/train-images-boxable-with-rotation.csv"
-jsonl_in = "openimages/sft.jsonl"  # or preference.jsonl or multi-turn.jsonl
-jsonl_out = "openimages/sft_with_local.jsonl"
-image_root = "openimages/openimage_source_images"  # parent folder containing train_*/ folders
+jsonl_in = "openimages/sft.jsonl"  # or preference.jsonl or multi-turn.jsonl;change to your actual file path
+jsonl_out = "openimages/sft_with_local.jsonl" # change to your actual desired file path
+image_root = "openimages/openimage_source_images"  # parent folder containing train_*/ folders; change to your actual file path
 
 
 print("📘 Loading metadata mapping (URL → ImageID)...")
