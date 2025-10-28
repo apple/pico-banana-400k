@@ -23,7 +23,7 @@ The dataset spans **35 edit operations** across **8 semantic categories**, cover
 | **Edit Operations** | 35 across 8 semantic categories |
 | **Categories** | Pixel & Photometric, Object-Level, Scene Composition, Stylistic, Text & Symbol, Human-Centric, Scale & Perspective, Spatial/Layout |
 | **Image Resolution** | 512–1024 px |
-| **Prompt Generator** | [Gemini-2.5-Flash](https://deepmind.google/discover/blog/gemini-2-5/) |
+| **Prompt Generator** | [Gemini-2.5-Flash](https://deepmind.google/models/gemini/flash/) |
 | **Editing Model** | Nano-Banana |
 | **Self-Evaluation** | Automated judging pipeline using Gemini-2.5-Pro for edit quality |
 
