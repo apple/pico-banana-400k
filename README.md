@@ -52,7 +52,7 @@ Pico-Banana-400K is built using a **two-stage multimodal generation pipeline**:
 
 ## 📊 Dataset Statistics
 
-**Nano-Banana-400K** contains **~400K image editing data**, covering a wide visual and semantic range drawn from real-world imagery.
+**Pico-Banana-400K** contains **~400K image editing data**, covering a wide visual and semantic range drawn from real-world imagery.
 
 ---
 
